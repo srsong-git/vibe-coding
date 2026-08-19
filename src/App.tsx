@@ -54,6 +54,7 @@ function App() {
 
   gameOverRef.current = isGameOver
 
+  const isCooking = cookingFood !== null && cookingProgress < 100
   const isComplete = cookingFood !== null && cookingProgress === 100
   const remainingTime = cookingFood
     ? Math.max(0, cookingFood.cookingTime * (1 - cookingProgress / 100))
@@ -217,10 +218,22 @@ function App() {
           </div>
 
           <dl className="result-stats">
-            <div><dt>방문 손님 수</dt><dd>{visitorCount}명</dd></div>
-            <div><dt>성공 주문 수</dt><dd>{successCount}건</dd></div>
-            <div><dt>실패 주문 수</dt><dd>{failureCount}건</dd></div>
-            <div><dt>최고 연속 성공</dt><dd>{bestSuccessStreak}회</dd></div>
+            <div>
+              <dt>방문 손님 수</dt>
+              <dd>{visitorCount}명</dd>
+            </div>
+            <div>
+              <dt>성공 주문 수</dt>
+              <dd>{successCount}건</dd>
+            </div>
+            <div>
+              <dt>실패 주문 수</dt>
+              <dd>{failureCount}건</dd>
+            </div>
+            <div>
+              <dt>최고 연속 성공</dt>
+              <dd>{bestSuccessStreak}회</dd>
+            </div>
           </dl>
 
           <button className="restart-button" type="button" onClick={restartGame}>
@@ -247,11 +260,17 @@ function App() {
           <div className="status-bar">
             <div className="status-card money-card">
               <span className="status-icon" aria-hidden="true">💰</span>
-              <div><span className="status-label">보유금액</span><strong>{money.toLocaleString('ko-KR')}원</strong></div>
+              <div>
+                <span className="status-label">보유금액</span>
+                <strong>{money.toLocaleString('ko-KR')}원</strong>
+              </div>
             </div>
             <div className={`status-card time-card ${businessTimeLeft <= 10 ? 'is-urgent' : ''}`}>
               <span className="status-icon" aria-hidden="true">⏰</span>
-              <div><span className="status-label">남은 영업시간</span><strong>{Math.ceil(businessTimeLeft)}초</strong></div>
+              <div>
+                <span className="status-label">남은 영업시간</span>
+                <strong>{Math.ceil(businessTimeLeft)}초</strong>
+              </div>
             </div>
           </div>
         </header>
@@ -262,10 +281,14 @@ function App() {
           </div>
           {isWaitingForCustomer ? (
             <div className={`sale-success ${customerResult === 'timeout' ? 'is-timeout' : ''}`} role="status">
-              <span className="sale-success-emoji" aria-hidden="true">{customerResult === 'success' ? '🎉' : '😠'}</span>
+              <span className="sale-success-emoji" aria-hidden="true">
+                {customerResult === 'success' ? '🎉' : '😠'}
+              </span>
               <strong>{feedbackMessage}</strong>
               <span className="sale-amount">
-                {customerResult === 'success' ? `+${lastSalePrice.toLocaleString('ko-KR')}원` : '판매금액 0원'}
+                {customerResult === 'success'
+                  ? `+${lastSalePrice.toLocaleString('ko-KR')}원`
+                  : '판매금액 0원'}
               </span>
               <p>새로운 손님이 오고 있어요...</p>
             </div>
@@ -296,13 +319,18 @@ function App() {
                     aria-valuemax={10}
                     aria-valuenow={Math.ceil(customerTimeLeft)}
                   >
-                    <span className="patience-fill" style={{ width: `${(customerTimeLeft / 10) * 100}%` }} />
+                    <span
+                      className="patience-fill"
+                      style={{ width: `${(customerTimeLeft / 10) * 100}%` }}
+                    />
                   </div>
                 </div>
               </div>
             </div>
           )}
-          <div className="counter" aria-hidden="true"><span>어서오세요!</span></div>
+          <div className="counter" aria-hidden="true">
+            <span>어서오세요!</span>
+          </div>
         </section>
 
         <section className="menu-area" aria-labelledby="menu-title">
@@ -313,7 +341,9 @@ function App() {
           </div>
 
           {feedbackMessage && !isWaitingForCustomer && (
-            <div className="feedback-message" role="alert">🙅 {feedbackMessage}</div>
+            <div className="feedback-message" role="alert">
+              🙅 {feedbackMessage}
+            </div>
           )}
 
           <div className={`cooking-station ${isComplete ? 'is-complete' : ''}`} aria-live="polite">
@@ -338,7 +368,9 @@ function App() {
                   <span className="progress-fill" style={{ width: `${cookingProgress}%` }} />
                 </div>
                 {isComplete && (
-                  <button className="serve-button" type="button" onClick={giveFoodToCustomer}>손님에게 주기 🙌</button>
+                  <button className="serve-button" type="button" onClick={giveFoodToCustomer}>
+                    손님에게 주기 🙌
+                  </button>
                 )}
               </>
             ) : (
